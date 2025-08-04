@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSON Log Viewer</title>
+</head>
+<body>
+  <h2>Upload JSON File</h2>
+  <input type="file" id="fileInput">
+  <button onclick="uploadFile()">Upload</button>
+  <p id="count"></p>
+  <table border="1" id="logTable"></table>
+
+  <script>
+    function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('count').innerText = `Total logs: ${data.count}`;
+        const table = document.getElementById('logTable');
+        table.innerHTML = '';
+
+        if (data.logs.length > 0) {
+          const headers = Object.keys(data.logs[0]);
+          const headerRow = document.createElement('tr');
+          headers.forEach(h => {
+            const th = document.createElement('th');
+            th.innerText = h;
+            headerRow.appendChild(th);
+          });
+          table.appendChild(headerRow);
+
+          data.logs.forEach(log => {
+            const row = document.createElement('tr');
+            headers.forEach(h => {
+              const td = document.createElement('td');
+              td.innerText = log[h];
+              row.appendChild(td);
+            });
+            table.appendChild(row);
+          });
+        }
+      })
+      .catch(() => alert('Error uploading or parsing file'));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[
+  { "id": 1, "level": "info", "message": "App started" },
+  { "id": 2, "level": "warning", "message": "Low memory" },
+  { "id": 3, "level": "error", "message": "Crash detected" },
+  { "id": 4, "level": "info", "message": "Restarted service" },
+  { "id": 5, "level": "debug", "message": "Verbose log" }
+]
